@@ -1,6 +1,5 @@
 ---
 # vars/k8s_vars.yml
-apiserver_advertise_address: "172.31.26.104"
 pod_network_cidr: "192.168.0.0/16"
 node_name: master
 user: ubuntu
