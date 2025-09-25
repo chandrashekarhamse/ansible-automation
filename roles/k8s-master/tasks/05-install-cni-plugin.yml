@@ -1,0 +1,16 @@
+---
+- name: Download cni plugin
+  ansible.builtin.get_url:
+    url: https://github.com/containernetworking/plugins/releases/download/v{{cni_plugin_version}}/cni-plugins-linux-amd64-v{{cni_plugin_version}}.tgz
+    dest: /tmp/cni-plugins-linux-amd64-v{{cni_plugin_version}}.tgz
+    mode: '0644'
+
+- name: mkdir for cni 
+  ansible.builtin.file:
+    path: /opt/cni/bin
+    state: directory
+    mode: '0755'
+
+- name: untar cni 
+  ansible.builtin.command:
+    cmd: tar Cxzvf /opt/cni/bin /tmp/cni-plugins-linux-amd64-v{{cni_plugin_version}}.tgz

@@ -1,0 +1,10 @@
+---
+- name: download runc
+  ansible.builtin.get_url:
+    url: https://github.com/opencontainers/runc/releases/download/v{{runc_version}}/runc.amd64
+    dest: /tmp/runc.amd64
+    mode: '0644'
+
+- name: install runc binary
+  ansible.builtin.command:
+    cmd: install -m 755 /tmp/runc.amd64 /usr/local/sbin/runc

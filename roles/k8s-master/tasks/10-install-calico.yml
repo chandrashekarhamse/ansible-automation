@@ -1,0 +1,13 @@
+---
+- name: Install calico operator
+  ansible.builtin.shell: |
+    KUBECONFIG={{kubeconfig_path}} kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v{{calico_version}}/manifests/tigera-operator.yaml
+
+- name: Download custom resources
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/projectcalico/calico/v{{calico_version}}/manifests/custom-resources.yaml
+    dest: /tmp/custom-resources.yaml
+
+- name: Install custom resources
+  ansible.builtin.shell: |
+    KUBECONFIG={{kubeconfig_path}} kubectl apply -f /tmp/custom-resources.yaml

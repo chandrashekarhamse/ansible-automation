@@ -1,0 +1,64 @@
+---
+- name: Download containerd
+  ansible.builtin.get_url:
+    url: https://github.com/containerd/containerd/releases/download/v{{containerd_version}}/containerd-{{containerd_version}}-linux-amd64.tar.gz
+    dest: /tmp/containerd-{{containerd_version}}-linux-amd64.tar.gz
+    mode: '0644'
+
+- name:
+  ansible.builtin.command:
+    cmd: tar -C /usr/local -xzvf /tmp/containerd-{{containerd_version}}-linux-amd64.tar.gz
+
+- name: Download containerd service
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/containerd/containerd/main/containerd.service
+    dest: /tmp/containerd.service
+    mode: '0644'
+
+- name: mkdir for containerd service under systemd
+  ansible.builtin.file:
+    path: /usr/local/lib/systemd/system/
+    state: directory
+    mode: '0755'
+
+- name: Move containerd.service to systemd directory
+  ansible.builtin.command:
+    cmd: mv /tmp/containerd.service /usr/local/lib/systemd/system/containerd.service
+
+- name: create /etc/containerd directory
+  ansible.builtin.file:
+    path: /etc/containerd
+    state: directory
+    mode: '0755'
+
+- name: Generate default containerd config
+  ansible.builtin.shell: containerd config default | tee /etc/containerd/config.toml
+
+- name: Enable SystemdCgroup in containerd config
+  ansible.builtin.shell: |
+    sudo sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+
+- name: Reload systemd daemon
+  ansible.builtin.command:
+    cmd: systemctl daemon-reload
+
+- name: Enable and start containerd service
+  ansible.builtin.systemd:
+    name: containerd
+    enabled: yes
+    state: started
+
+- name: check the containerd service status
+  ansible.builtin.command:
+    cmd: systemctl status containerd 
+  register: containerd_status
+
+- name: show containerd service status output
+  ansible.builtin.debug:
+    var: containerd_status.stdout_lines
+
+
+
+
+
+

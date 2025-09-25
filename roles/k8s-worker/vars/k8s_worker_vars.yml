@@ -1,0 +1,15 @@
+# vars/k8s_vars.yml
+node_name: worker
+user: ubuntu
+owner: ubuntu
+group_owner: ubuntu
+containerd_version: 1.7.14
+runc_version: 1.1.12
+cni_plugin_version: 1.5.0
+k8s_version: 1.29
+kubelet_version: 1.29.6-1.1
+kubeadm_version: 1.29.6-1.1
+kubectl_version: 1.29.6-1.1
+kubeconfig_path: /home/ubuntu/.kube/config
+calico_version: 3.28.0
+kubeadm_join_command_file_path: /Users/csss5tp4/Downloads/install-k8s-ansible/roles/k8s-worker/tasks

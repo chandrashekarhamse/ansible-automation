@@ -1,0 +1,8 @@
+---
+- name: setup k8s controlplane nodes
+  hosts: master
+  become: true
+  remote_user: ubuntu
+  gather_facts: no
+  roles:
+  - k8s-master

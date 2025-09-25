@@ -1,0 +1,60 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install required packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gpg
+    state: present
+    
+- name: Download kubernetes GPG key and save
+  ansible.builtin.shell: |
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v{{k8s_version}}/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+  args:
+    creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+- name: Add k8s repository
+  ansible.builtin.copy:
+    content: "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v{{k8s_version}}/deb/ /"
+    dest: /etc/apt/sources.list.d/kubernetes.list
+    mode: '0644'
+
+- name: update the apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install specific version of kubelet, kubeadm and kubectl
+  ansible.builtin.apt:
+    name:
+      - kubelet={{kubelet_version}} 
+      - kubeadm={{kubeadm_version}} 
+      - kubectl={{kubectl_version}}
+    state: present
+    allow_downgrade: yes
+    force: yes
+
+- name: Hold kubelet, kubeadm and kubectl packages
+  ansible.builtin.apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: fixed
+
+- name: Get versions of kubeadm, kubelet, and kubectl
+  ansible.builtin.command: "{{ item.cmd }}"
+  register: version_results
+  loop:
+    - { name: 'kubeadm version', cmd: 'kubeadm version' }
+    - { name: 'kubelet version', cmd: 'kubelet --version' }
+    - { name: 'kubectl client version', cmd: 'kubectl version --client' }
+
+- name: Display version outputs
+  ansible.builtin.debug:
+    msg: "{{ item.item.name }} output:\n{{ item.stdout }}"
+  loop: "{{ version_results.results }}"

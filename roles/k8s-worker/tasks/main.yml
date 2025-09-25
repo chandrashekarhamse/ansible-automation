@@ -1,0 +1,12 @@
+---
+- name: import the variables required for worker node
+  include_vars: ../vars/k8s_worker_vars.yml
+
+- import_tasks: ../../k8s-master/tasks/01-disable-swap.yml
+- import_tasks: ../../k8s-master/tasks/02-forward-ipv4.yml
+- import_tasks: ../../k8s-master/tasks/03-install-container-runtime.yml
+- import_tasks: ../../k8s-master/tasks/04-install-runc.yml
+- import_tasks: ../../k8s-master/tasks/05-install-cni-plugin.yml
+- import_tasks: ../../k8s-master/tasks/06-install-k8s-utilities.yml
+- import_tasks: ../../k8s-master/tasks/07-configure-crictl.yml
+- import_tasks: reqister-to-master.yml

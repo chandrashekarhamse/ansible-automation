@@ -1,0 +1,9 @@
+---
+- name: Disable swap and comment swap entry
+  command: swapoff -a
+
+- name: comment out swap entry in /etc/fstab
+  replace:
+    path: /etc/fstab
+    regexp: '^(.*\s+swap\s+.*)$'
+    replace: '#\1'

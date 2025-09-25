@@ -1,0 +1,16 @@
+---
+# Import variables for master
+- name: Load Variable from k8s_master_vars
+  include_vars: ../vars/k8s_master_vars.yml
+
+# import task to run on master
+- import_tasks: 01-disable-swap.yml
+- import_tasks: 02-forward-ipv4.yml
+- import_tasks: 03-install-container-runtime.yml
+- import_tasks: 04-install-runc.yml
+- import_tasks: 05-install-cni-plugin.yml
+- import_tasks: 06-install-k8s-utilities.yml
+- import_tasks: 07-configure-crictl.yml
+- import_tasks: 08-initialize-control-plane.yml
+- import_tasks: 09-configure-kubeconfig.yml
+- import_tasks: 10-install-calico.yml

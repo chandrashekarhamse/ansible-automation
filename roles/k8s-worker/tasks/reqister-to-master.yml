@@ -1,0 +1,13 @@
+---
+
+- name: Extract kubeadm join command
+  delegate_to: localhost
+  become: false
+  shell: grep -A 1 "kubeadm join" {{kubeadm_join_command_file_path}}/kubeadm_init_output_join_command.txt
+  register: join_cmd_output
+
+- debug:
+    var: join_cmd_output.stdout
+
+- name: Run kubeadm join on worker nodes
+  ansible.builtin.shell: "{{ join_cmd_output.stdout }}"

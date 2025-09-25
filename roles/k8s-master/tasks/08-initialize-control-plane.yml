@@ -1,0 +1,25 @@
+---
+- name: Get the master private ip
+  delegate_to: localhost
+  become: false
+  shell: |
+    aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=k8s-master" "Name=instance-state-name,Values=running" \
+    --query "Reservations[].Instances[].PrivateIpAddress" \
+    --output text
+  register: master_private_ip
+
+- debug:
+    var: master_private_ip.stdout
+
+- name: Initialize kubernetes master node
+  ansible.builtin.command:
+    cmd: kubeadm init --pod-network-cidr={{ pod_network_cidr }} --apiserver-advertise-address={{ master_private_ip.stdout }} --node-name {{ node_name }}
+  register: kubeadm_init_output
+
+- name: save kubeadm init output to a file on remote
+  become: false
+  ansible.builtin.copy:
+    content: "{{ kubeadm_init_output.stdout }}"
+    dest: "{{ kubeadm_join_command_file_path }}/kubeadm_init_output_join_command.txt"
+  delegate_to: localhost
