@@ -2,7 +2,7 @@
 # Import variables for master
 - name: Load Variable from k8s_master_vars
   include_vars: ../vars/k8s_master_vars.yml
-
+  
 # import task to run on master
 - import_tasks: 01-disable-swap.yml
 - import_tasks: 02-forward-ipv4.yml
