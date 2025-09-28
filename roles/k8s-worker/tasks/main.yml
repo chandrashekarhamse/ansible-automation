@@ -9,4 +9,4 @@
 - import_tasks: ../../k8s-master/tasks/05-install-cni-plugin.yml
 - import_tasks: ../../k8s-master/tasks/06-install-k8s-utilities.yml
 - import_tasks: ../../k8s-master/tasks/07-configure-crictl.yml
-- import_tasks: reqister-to-master.yml
+- import_tasks: register-to-master.yml
