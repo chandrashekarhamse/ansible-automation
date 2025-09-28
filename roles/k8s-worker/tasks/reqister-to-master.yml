@@ -3,7 +3,7 @@
 - name: Extract kubeadm join command
   delegate_to: localhost
   become: false
-  shell: grep -A 1 "kubeadm join" {{kubeadm_join_command_file_path}}/kubeadm_init_output_join_command.txt
+  shell: grep -A 1 "kubeadm join" {{ playbook_dir }}/roles/k8s-worker/tasks/kubeadm_init_output_join_command.txt
   register: join_cmd_output
 
 - debug:
