@@ -12,4 +12,4 @@ kubeadm_version: 1.29.6-1.1
 kubectl_version: 1.29.6-1.1
 kubeconfig_path: /home/ubuntu/.kube/config
 calico_version: 3.28.0
-kubeadm_join_command_file_path: /Users/csss5tp4/Downloads/install-k8s-ansible/roles/k8s-worker/tasks
+kubeadm_join_command_file_path: /roles/k8s-worker/tasks/kubeadm_init_output_join_command.txt
