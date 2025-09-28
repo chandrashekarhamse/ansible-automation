@@ -2,7 +2,7 @@ plugin: amazon.aws.aws_ec2
 regions:
   - us-east-1
 
-iam_role_arn: arn:aws:iam::375332747108:role/devops-007-infra-jenkins-slave-dev-role
+iam_role_arn: arn:aws:iam::375332747108:role/jenkins-agent-role
 
 filters:
   instance-state-name: running
